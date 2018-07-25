@@ -1,6 +1,6 @@
 # ktl
 
-![Logo of the project](docs/images/logo.png)
+![Logo of the project](docs/images/logo.png){ width=50% }
 
 
 Kube Control - A Wrapper Around Kubectl
