@@ -12,3 +12,4 @@ cobra init github.com/svx/ktl
 - https://sbstjn.com/create-golang-cli-application-with-cobra-and-goxc.html
 - https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
 - https://github.com/kjk/go-cookbook/blob/master/advanced-exec/04-check-exe-exists.go
+- https://github.com/aarondl/kctl
