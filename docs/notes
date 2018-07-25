@@ -1,0 +1,12 @@
+# Init with cobra
+cobra init github.com/svx/ktl
+
+# Already added
+- https://github.com/mitchellh/go-homedir (if we want to use a config later on)
+
+# Vendoring
+- dep -> https://golang.github.io/dep/
+
+# Posts
+
+- https://sbstjn.com/create-golang-cli-application-with-cobra-and-goxc.html
