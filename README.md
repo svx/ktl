@@ -1,9 +1,9 @@
-# ktl
+# Kube Control
 
 ![Logo of the project](docs/images/logo-small.png)
 
 
-Kube Control - A Wrapper Around Kubectl
+A Wrapper Around Kubectl
 
 ## Contributing
 
