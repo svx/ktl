@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"fmt"
+	//"fmt"
         "os"
 	"os/exec"
 
@@ -23,7 +23,7 @@ import (
         "github.com/fatih/color"
 )
 
-var list bool // used for flags
+var verbose bool // used for flags
 
 // podsCmd represents the pods command
 var podsCmd = &cobra.Command{
@@ -42,17 +42,23 @@ to quickly create a Cobra application.`,
 }
 
 func pods() {
-    if list {
+    if verbose {
         //fmt.Println("Listing Pods")
-        color.Yellow("All Pods Of All Namespaces")
-	cmdStr := "kubectl get pods --all-namespaces"
+        color.Yellow("Verbose List Of All Pods")
+	cmdStr := "kubectl get pods --all-namespaces -o wide"
         cmd := exec.Command("bash", "-c", cmdStr)
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Run()
     } else {
-        fmt.Println("Pods Pods Pods")
+        color.Yellow("List Of All Pods")
+        cmdStr := "kubectl get pods --all-namespaces"
+        cmd := exec.Command("bash", "-c", cmdStr)
+        cmd.Stdout = os.Stdout
+        cmd.Stdin = os.Stdin
+        cmd.Stderr = os.Stderr
+        cmd.Run()
     }
 }
 
@@ -68,5 +74,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	//podsCmd.Flags().BoolP("list", "l", false, "List all pods of all namespaces")
-        podsCmd.Flags().BoolVarP(&list, "list", "l", false, "List all pods of all namespaces")
+        podsCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Verbose list all pods")
 }
