@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"fmt"
+	//"fmt"
         "os"
 	"os/exec"
 
@@ -23,12 +23,10 @@ import (
         "github.com/fatih/color"
 )
 
-var list bool // used for flags
-
-// podsCmd represents the pods command
-var podsCmd = &cobra.Command{
-	Use:   "pods",
-	Short: "Interact with pods",
+// clusterInfoCmd represents the clusterInfo command
+var infoCmd = &cobra.Command{
+	Use:   "info",
+	Short: "Shows common info about the cluster",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -36,37 +34,31 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("pods called")
-		pods()
+		//fmt.Println("clusterInfo called")
+                clusterINFO()
 	},
 }
 
-func pods() {
-    if list {
-        //fmt.Println("Listing Pods")
-        color.Yellow("All Pods Of All Namespaces")
-	cmdStr := "kubectl get pods --all-namespaces"
+func clusterINFO() {
+        color.Yellow("Cluster Information")
+	cmdStr := "kubectl cluster-info"
         cmd := exec.Command("bash", "-c", cmdStr)
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Run()
-    } else {
-        fmt.Println("Pods Pods Pods")
-    }
 }
 
 func init() {
-	rootCmd.AddCommand(podsCmd)
+	rootCmd.AddCommand(infoCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// podsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// clusterInfoCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	//podsCmd.Flags().BoolP("list", "l", false, "List all pods of all namespaces")
-        podsCmd.Flags().BoolVarP(&list, "list", "l", false, "List all pods of all namespaces")
+	// clusterInfoCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
