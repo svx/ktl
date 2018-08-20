@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+        "os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -34,16 +36,23 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("pods called")
-		flagset.Visit(checkFlags);
+		pods()
 	},
 }
 
-func checkFlags(f *Flag){
-  if(f.Name == "list"){
-    fmt.Println("pods list")
-  }
+func pods() {
+    if list {
+        //fmt.Println("Listing Pods")
+	cmdStr := "kubectl get pods --all-namespaces"
+        cmd := exec.Command("bash", "-c", cmdStr)
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Run()
+    } else {
+        fmt.Println("Pods Pods Pods")
+    }
 }
-
 
 func init() {
 	rootCmd.AddCommand(podsCmd)
@@ -56,5 +65,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	podsCmd.Flags().BoolP("&list", "l", false, "List all pods of all namespaces")
+	//podsCmd.Flags().BoolP("list", "l", false, "List all pods of all namespaces")
+        podsCmd.Flags().BoolVarP(&list, "list", "l", false, "List all pods of all namespaces")
 }
