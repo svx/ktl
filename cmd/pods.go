@@ -20,6 +20,7 @@ import (
 	"os/exec"
 
 	"github.com/spf13/cobra"
+        "github.com/fatih/color"
 )
 
 var list bool // used for flags
@@ -43,6 +44,7 @@ to quickly create a Cobra application.`,
 func pods() {
     if list {
         //fmt.Println("Listing Pods")
+        color.Yellow("All Pods Of All Namespaces")
 	cmdStr := "kubectl get pods --all-namespaces"
         cmd := exec.Command("bash", "-c", cmdStr)
 	cmd.Stdout = os.Stdout
