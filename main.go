@@ -18,7 +18,7 @@ import "github.com/svx/ktl/cmd"
 
 var (
 	// VERSION is set during build
-	VERSION = "0.0.1"
+	Version = "foo"
 )
 
 //func main() {
@@ -26,5 +26,5 @@ var (
 //}
 
 func main() {
-	cmd.Execute(VERSION)
+	cmd.Execute(Version)
 }

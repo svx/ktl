@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:8ebfc93b1a56ca5be538312c0d84173b7e92a47e6bc6c7b7194a02b29e823904"
+  name = "github.com/atrox/homedir"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06c445c1ff71259ff8653dd17941b062b4c7f457"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:865079840386857c809b72ce300be7580cb50d3d3129ce11bf9aa6ca2bc1934a"
   name = "github.com/fatih/color"
   packages = ["."]
@@ -178,6 +186,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/atrox/homedir",
     "github.com/fatih/color",
     "github.com/mitchellh/go-homedir",
     "github.com/spf13/cobra",

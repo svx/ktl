@@ -1,50 +1,43 @@
-#The shell we use
+# ########################################################## #
+# Makefile for Golang Project
+# Includes cross-compiling, installation, cleanup
+# ########################################################## #
+
+# Check for required command tools to build or stop immediately
+EXECUTABLES = git go find pwd
+K := $(foreach exec,$(EXECUTABLES),\
+        $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH)))
+
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+
 SHELL := /bin/bash
 
+BINARY=ktl
+#VERSION=0.0.2
 VERSION := $(shell cat VERSION)
+BUILD=`git rev-parse HEAD`
+PLATFORMS=darwin linux windows
+ARCHITECTURES=386 amd64
 
-BIN_DIR := $(GOPATH)/bin
-GOMETALINTER := $(BIN_DIR)/gometalinter
-PATH_BUILD=pkg
-FILE_COMMAND=ktl
-FILE_ARCH=ktl_darwin_amd64
-# Dependencies:
-# - https://github.com/mitchellh/gox
+# Setup linker flags option for build that interoperate with variable names in src code
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 
+default: build
 
-# We like colors
-# # From: https://coderwall.com/p/izxssa/colored-makefile-for-golang-projects
-RED=`tput setaf 1`
-GREEN=`tput setaf 2`
-RESET=`tput sgr0`
-YELLOW=`tput setaf 3`
-#
-# Add the following 'help' target to your Makefile
-# And add help text after each target name starting with '\#\#'
-.PHONY: help
-help: ## This help message
-	@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s :)"
+all: clean build_all install
 
+build:
+	go build ${LDFLAGS} -o ${BINARY}
 
-.PHONY: test-release
-test-release: ## Builds binary packages for testing
-	@echo ""
-	@echo "$(YELLOW)==> Running fmt locally ...$(RESET)"
-	go fmt
-	@echo "$(YELLOW)==> Creating binaries for version $(VERSION), please wait ....$(RESET)"
-	@if [ -d pkg ]; then rm -rf pkg; fi;
-	@gox -osarch="linux/amd64" -osarch="darwin/amd64" -output "pkg/{{.Dir}}_{{.OS}}_{{.Arch}}"
-
-
-$(GOMETALINTER):
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install &> /dev/null
-
-.PHONY: lint
-lint: $(GOMETALINTER)
-	gometalinter ./... --vendor
+build_all:
+	$(foreach GOOS, $(PLATFORMS),\
+	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -v -o $(BINARY)-$(GOOS)-$(GOARCH))))
 
 install:
-	@install -d -m 755 '$(HOME)/bin/'
-	install $(PATH_BUILD)/$(FILE_ARCH) '$(HOME)/bin/$(FILE_COMMAND)'
+	go install ${LDFLAGS}
 
+# Remove only what we've created
+clean:
+	find ${ROOT_DIR} -name '${BINARY}[-?][a-zA-Z0-9]*[-?][a-zA-Z0-9]*' -delete
+
+.PHONY: check clean install build_all all
