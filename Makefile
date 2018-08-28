@@ -3,6 +3,21 @@
 # Includes cross-compiling, installation, cleanup
 # ########################################################## #
 
+#The shell we use
+SHELL := /bin/bash
+
+# We like colors
+# # From: https://coderwall.com/p/izxssa/colored-makefile-for-golang-projects
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+RESET=`tput sgr0`
+YELLOW=`tput setaf 3`
+
+# Go settings
+BIN_DIR := $(GOPATH)/bin
+GOMETALINTER := $(BIN_DIR)/gometalinter
+PATH_BUILD=pkg
+
 # Check for required command tools to build or stop immediately
 EXECUTABLES = git go find pwd
 K := $(foreach exec,$(EXECUTABLES),\
@@ -10,24 +25,32 @@ K := $(foreach exec,$(EXECUTABLES),\
 
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-SHELL := /bin/bash
 
 BINARY=ktl
-#VERSION=0.0.2
 VERSION := $(shell cat VERSION)
 BUILD=`git rev-parse HEAD`
 PLATFORMS=darwin linux windows
-ARCHITECTURES=386 amd64
+ARCHITECTURES=amd64
 
 # Setup linker flags option for build that interoperate with variable names in src code
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 
-default: build
+# Add the following 'help' target to your Makefile
+# And add help text after each target name starting with '\#\#'
+.PHONY: help
+help: ## This help message
+	@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s :)"
+
+.PHONY: default
+default: build ## Builds default binary
 
 all: clean build_all install
 
-build:
-	go build ${LDFLAGS} -o ${BINARY}
+.PHONY: build
+build: ## Build test binary
+	@echo ""
+	@echo "$(YELLOW)==> Creating test binaries for $(VERSION)$(RESET)"
+	go build ${LDFLAGS} -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
 
 build_all:
 	$(foreach GOOS, $(PLATFORMS),\
@@ -40,4 +63,3 @@ install:
 clean:
 	find ${ROOT_DIR} -name '${BINARY}[-?][a-zA-Z0-9]*[-?][a-zA-Z0-9]*' -delete
 
-.PHONY: check clean install build_all all
