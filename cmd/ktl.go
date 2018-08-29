@@ -26,6 +26,7 @@ import (
 var (
 	// VERSION is set during build
 	VERSION string
+
 )
 
 var cfgFile string
@@ -69,7 +70,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ktl.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kube/config)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -89,9 +90,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".ktl" (without extension).
+		// Search config in home directory with name ".kube" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".ktl")
+		viper.SetConfigName(".kube")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
@@ -101,3 +102,4 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
+
