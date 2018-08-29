@@ -16,7 +16,7 @@ YELLOW=`tput setaf 3`
 # Go settings
 BIN_DIR := $(GOPATH)/bin
 GOMETALINTER := $(BIN_DIR)/gometalinter
-PATH_BUILD=pkg
+PATH_BUILD=pkgs
 
 # Check for required command tools to build or stop immediately
 EXECUTABLES = git go find pwd
@@ -28,12 +28,16 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 BINARY=ktl
 VERSION := $(shell cat VERSION)
-BUILD=`git rev-parse HEAD`
+GIT_COMMIT := $(shell git rev-parse HEAD)
+BUILD:= $(shell date -u +%FT%T)
 PLATFORMS=darwin linux windows
 ARCHITECTURES=amd64
+VERSION_PACKAGE = github.com/svx/ktl/pkg/version
 
 # Setup linker flags option for build that interoperate with variable names in src code
-LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
+#LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.GitCommit=$(GIT_COMMIT)"
+LDFLAGS += -X main.Version=${VERSION}
+LDFLAGS += -X main.GitCommit=${GIT_COMMIT}
 
 # Add the following 'help' target to your Makefile
 # And add help text after each target name starting with '\#\#'
@@ -50,7 +54,10 @@ all: clean build_all install
 build: ## Build test binary
 	@echo ""
 	@echo "$(YELLOW)==> Creating test binaries for $(VERSION)$(RESET)"
-	go build ${LDFLAGS} -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	#go build ${LDFLAGS} -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	#go build -ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	go build -ldflags "-X main.Version=${VERSION} -X main.GitCommit=$(GIT_COMMIT)" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	#go build -ldflags '$(LDFLAGS)' -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
 
 build_all:
 	$(foreach GOOS, $(PLATFORMS),\
@@ -63,3 +70,10 @@ install:
 clean:
 	find ${ROOT_DIR} -name '${BINARY}[-?][a-zA-Z0-9]*[-?][a-zA-Z0-9]*' -delete
 
+$(GOMETALINTER):
+	go get -u github.com/alecthomas/gometalinter
+	gometalinter --install &> /dev/null
+
+.PHONY: lint
+lint: $(GOMETALINTER)
+	gometalinter ./... --vendor

@@ -18,7 +18,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+        "github.com/svx/ktl/pkg/version"
 )
+
+var GitCommit = ""
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
@@ -26,6 +29,7 @@ var versionCmd = &cobra.Command{
 	Short: "Show ktl version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(rootCmd.Use + " " + VERSION)
+                fmt.Printf("Git Hash: %s\n", GitCommit)
 	},
 }
 
