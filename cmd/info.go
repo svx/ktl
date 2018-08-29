@@ -27,12 +27,12 @@ import (
 var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Shows common info about the cluster",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `Display addresses of the master and services.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+This is the short version of the kubectl command:
+
+kubectl cluster-info`,
+
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("clusterInfo called")
                 clusterINFO()
