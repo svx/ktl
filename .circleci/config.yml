@@ -24,14 +24,15 @@ jobs:
   "deploy site":
     docker:
       - image: testthedocs/ttd-zipcurl
-    #<<: *defaults
+    <<: *defaults
     steps:
       - checkout
       - attach_workspace:
           at: ~/sphinx/html
       - run:
           command: |
-              ls -la
+              pwd
+              ls -la /root
               .circleci/deploy.sh
 
 workflows:
