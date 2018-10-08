@@ -14,7 +14,7 @@ jobs:
           command: |
               pwd
               ls -la
-              cd docs && make html
+              sphinx-build -c docs -b html docs docs/_build/html
 
       - persist_to_workspace:
           root: ~/sphinx/docs
