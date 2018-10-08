@@ -24,7 +24,7 @@ jobs:
   "deploy site":
     docker:
       - image: testthedocs/ttd-zipcurl
-    <<: *defaults
+        #<<: *defaults
     steps:
       - checkout
       - attach_workspace:
@@ -41,3 +41,5 @@ workflows:
     jobs:
       - "html"
       - "deploy site"
+          requires:
+             - "html"
