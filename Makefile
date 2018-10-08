@@ -16,7 +16,7 @@ YELLOW=`tput setaf 3`
 # Go settings
 BIN_DIR := $(GOPATH)/bin
 GOMETALINTER := $(BIN_DIR)/gometalinter
-PATH_BUILD=pkgs
+PATH_BUILD=test-pkgs
 
 # Check for required command tools to build or stop immediately
 EXECUTABLES = git go find pwd

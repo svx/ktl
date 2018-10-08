@@ -16,6 +16,6 @@ fake-eggs/
 parts/
 dist/
 var/
-pkg/
+test-pkgs/
 docs/_build/
 .DS_Store

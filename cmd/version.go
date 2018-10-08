@@ -18,7 +18,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-        "github.com/svx/ktl/pkg/version"
+        //"github.com/svx/ktl/pkg/version"
 )
 
 var GitCommit = ""
