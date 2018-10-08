@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ktl'
+project = 'Kube Control'
 copyright = '2018, svx'
 author = 'svx'
 
@@ -96,7 +96,7 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-#html_sidebars = {'**': ['util/sidetoc.html']}
+html_sidebars = {'**': ['util/sidetoc.html']}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
