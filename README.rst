@@ -19,6 +19,9 @@ For major changes, please open an issue first to discuss what you would like to 
 
 Please make sure to update tests as appropriate.
 
+- `Issue Tracker <https://github.com/svx/ktl/issues/>`_
+- `Source Code <https://github.com/svx/ktl/>`_
+
 License
 =======
 
