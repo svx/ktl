@@ -21,6 +21,8 @@ var (
 	Version = "foo"
 )
 
+
+
 //func main() {
 //	cmd.Execute()
 //}

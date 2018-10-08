@@ -18,10 +18,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-        "github.com/svx/ktl/pkg/version"
+        //"github.com/svx/ktl/pkg/version"
 )
 
-var GitCommit = ""
+//var GitCommit = string
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
