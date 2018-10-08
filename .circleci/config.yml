@@ -10,7 +10,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: cd docs && make html
+      - run: cd project/docs && make html
 
       - persist_to_workspace:
           root: ~/sphinx/docs
@@ -34,5 +34,5 @@ workflows:
   version: 2
   btd:
     jobs:
-      - "html"         
+      - "html"
       - "deploy site"
