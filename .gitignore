@@ -17,4 +17,5 @@ parts/
 dist/
 var/
 pkg/
+docs/_build/
 .DS_Store
