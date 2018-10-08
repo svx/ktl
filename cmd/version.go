@@ -21,7 +21,9 @@ import (
         //"github.com/svx/ktl/pkg/version"
 )
 
-//var GitCommit = string
+var (
+    BuildTime string
+)
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
@@ -29,7 +31,7 @@ var versionCmd = &cobra.Command{
 	Short: "Show ktl version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(rootCmd.Use + " " + VERSION)
-                fmt.Printf("Git Hash: %s\n", GitCommit)
+                fmt.Printf("Build Date: %s\n", BuildTime)
 	},
 }
 

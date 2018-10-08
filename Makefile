@@ -54,10 +54,12 @@ all: clean build_all install
 build: ## Build test binary
 	@echo ""
 	@echo "$(YELLOW)==> Creating test binaries for $(VERSION)$(RESET)"
-	#go build ${LDFLAGS} -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	#go build ${LDFLAGS} -X github.com/svx/ktl/cmd/version -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
 	#go build -ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
-	go build -ldflags "-X main.Version=${VERSION} -X main.GitCommit=$(GIT_COMMIT)" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	go build -ldflags "-X main.Version=${VERSION} -X github.com/svx/ktl/cmd.BuildTime=$(BUILD)" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
 	#go build -ldflags '$(LDFLAGS)' -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+
+
 
 build_all:
 	$(foreach GOOS, $(PLATFORMS),\
