@@ -43,3 +43,7 @@ workflows:
       - "deploy site":
           requires:
              - "html"
+      build:
+        branches:
+          only:
+            -master
