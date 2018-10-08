@@ -40,6 +40,6 @@ workflows:
   btd:
     jobs:
       - "html"
-      - "deploy site"
+      - "deploy site":
           requires:
              - "html"
