@@ -10,7 +10,10 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: cd project/docs && make html
+      - run:
+          command: |
+              pwd
+              ls -la
 
       - persist_to_workspace:
           root: ~/sphinx/docs
