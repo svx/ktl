@@ -21,12 +21,6 @@ var (
 	Version = "foo"
 )
 
-
-
-//func main() {
-//	cmd.Execute()
-//}
-
 func main() {
 	cmd.Execute(Version)
 }
