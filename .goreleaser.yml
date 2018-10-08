@@ -1,4 +1,3 @@
-# This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
 builds:
 - env:
@@ -9,9 +8,11 @@ builds:
     - windows
   ldflags:
     - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+  binary: ktl
 archive:
+  format: tar.gz
   replacements:
-    darwin: Darwin
+    darwin: macOS
     linux: Linux
     windows: Windows
     386: i386
