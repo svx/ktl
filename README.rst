@@ -1,11 +1,17 @@
-# Kube Control
+============
+Kube Control
+============
 
-![Logo of the project](docs/images/logo-small.png)
+.. image:: docs/_static/logo-small.png
 
+About
+=====
 
 A Wrapper Around Kubectl
 
-## Contributing
+
+Contributing
+============
 
 Pull requests are welcome.
 
@@ -13,6 +19,7 @@ For major changes, please open an issue first to discuss what you would like to 
 
 Please make sure to update tests as appropriate.
 
-## License
+License
+=======
 
-[MIT](https://choosealicense.com/licenses/mit/)
+`MIT <https://choosealicense.com/licenses/mit/>`_
