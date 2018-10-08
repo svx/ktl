@@ -61,9 +61,8 @@ build: ## Build test binary
 
 
 
-build_all:
-	$(foreach GOOS, $(PLATFORMS),\
-	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); go build -v -o $(BINARY)-$(GOOS)-$(GOARCH))))
+build_gox:
+	gox -ldflags  "-X main.Version=${VERSION} -X github.com/svx/ktl/cmd.BuildTime=$(BUILD)" -osarch="linux/amd64"
 
 install:
 	go install ${LDFLAGS}
