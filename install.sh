@@ -17,14 +17,14 @@
 
 set -e
 
-# if [[ $EUID -ne 0 ]]; then
-#    echo "This script must be run with root/sudo "
-#    exit 1
-# fi
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run with root/sudo "
+   exit 1
+fi
 
 
 RELEASES_URL="https://github.com/svx/ktl/releases"
-INSTALL_DIRECTORY="/usr/local/bin/"
+INSTALL_DIRECTORY="/usr/local/bin"
 
 downloadJSON() {
     url="$2"
@@ -120,9 +120,9 @@ echo "Will install into $INSTALL_DIRECTORY"
 # assemble expected release artifact name
 if [ "${OS}" != "linux" ] && { [ "${ARCH}" = "ppc64" ] || [ "${ARCH}" = "ppc64le" ];}; then
     # ppc64 and ppc64le are only supported on Linux.
-    echo "${OS}-${ARCH} is not supported by this instalation script"
+    echo "${OS}_${ARCH} is not supported by this instalation script"
 else
-    BINARY="dep-${OS}-${ARCH}"
+    BINARY="ktl_${OS}_${ARCH}"
 fi
 
 # add .exe if on windows
