@@ -17,7 +17,14 @@
 
 set -e
 
+# if [[ $EUID -ne 0 ]]; then
+#    echo "This script must be run with root/sudo "
+#    exit 1
+# fi
+
+
 RELEASES_URL="https://github.com/svx/ktl/releases"
+INSTALL_DIRECTORY="/usr/local/bin/"
 
 downloadJSON() {
     url="$2"
@@ -64,26 +71,6 @@ downloadFile() {
     fi
 }
 
-findGoBinDirectory() {
-    EFFECTIVE_GOPATH=$(go env GOPATH)
-    # CYGWIN: Convert Windows-style path into sh-compatible path
-    if [ "$OS_CYGWIN" = "1" ]; then
-	EFFECTIVE_GOPATH=$(cygpath "$EFFECTIVE_GOPATH")
-    fi
-    if [ -z "$EFFECTIVE_GOPATH" ]; then
-        echo "Installation could not determine your \$GOPATH."
-        exit 1
-    fi
-    if [ -z "$GOBIN" ]; then
-        GOBIN=$(echo "${EFFECTIVE_GOPATH%%:*}/bin" | sed s#//*#/#g)
-    fi
-    if [ ! -d "$GOBIN" ]; then
-        echo "Installation requires your GOBIN directory $GOBIN to exist. Please create it."
-        exit 1
-    fi
-    eval "$1='$GOBIN'"
-}
-
 initArch() {
     ARCH=$(uname -m)
     if [ -n "$DEP_ARCH" ]; then
@@ -128,9 +115,6 @@ initArch
 initOS
 
 # determine install directory if required
-if [ -z "$INSTALL_DIRECTORY" ]; then
-    findGoBinDirectory INSTALL_DIRECTORY
-fi
 echo "Will install into $INSTALL_DIRECTORY"
 
 # assemble expected release artifact name
@@ -164,7 +148,7 @@ downloadFile "$BINARY_URL" "$DOWNLOAD_FILE"
 echo "Setting executable permissions."
 chmod +x "$DOWNLOAD_FILE"
 
-INSTALL_NAME="dep"
+INSTALL_NAME="ktl"
 
 if [ "$OS" = "windows" ]; then
     INSTALL_NAME="$INSTALL_NAME.exe"
