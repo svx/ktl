@@ -89,7 +89,6 @@ install: ## Install test binary locally
 	go install -ldflags "$(LD_FLAGS) -X main.Version=${VERSION} \
 	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE)"
 
-
 $(GOMETALINTER):
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install &> /dev/null
@@ -97,3 +96,7 @@ $(GOMETALINTER):
 .PHONY: lint
 lint: $(GOMETALINTER)
 	gometalinter ./... --vendor
+
+.PHONY: docs
+docs: ## Building docs locally
+	@docker run -v `pwd`/docs:/build/docs testthedocs/ttd-sphinx html
