@@ -18,11 +18,13 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/fatih/color"
         //"github.com/svx/ktl/pkg/version"
 )
 
 var (
-    BuildTime string
+	BuildTime string
+	GitCommit string
 )
 
 // versionCmd represents the version command
@@ -30,8 +32,10 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show ktl version",
 	Run: func(cmd *cobra.Command, args []string) {
+		color.Yellow("Version Info")
 		fmt.Println(rootCmd.Use + " " + VERSION)
-                fmt.Printf("Build Date: %s\n", BuildTime)
+				fmt.Printf("Build Date: %s\n", BuildTime)
+				fmt.Printf("Git Commit: %s\n", GitCommit)
 	},
 }
 

@@ -77,7 +77,8 @@ test-build: ## Creating test builds (binaries) for local testing
 	@if [ -d $(TEST_BUILDS) ]; then rm -rf $(TEST_BUILDS); fi;
 	@go fmt
 	@gox -ldflags "$(LD_FLAGS) -X main.Version=${VERSION} \
-	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE)" \
+	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE) \
+	 -X github.com/svx/ktl/cmd.GitCommit=$(GIT_COMMIT)" \
 	 -osarch="linux/amd64 darwin/amd64" -output "$(TEST_BUILDS)/{{.Dir}}_{{.OS}}_{{.Arch}}"
 	@echo ""
 	@echo "$(YELLOW)==> Done ! Test binaries for $(VERSION) are created in $(TEST_BUILDS) $(RESET)"
