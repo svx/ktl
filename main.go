@@ -18,7 +18,7 @@ import "github.com/svx/ktl/cmd"
 
 var (
 	// VERSION is set during build
-	Version = "foo"
+	Version = ""
 )
 
 func main() {

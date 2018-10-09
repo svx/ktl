@@ -13,11 +13,6 @@ GREEN=`tput setaf 2`
 RESET=`tput sgr0`
 YELLOW=`tput setaf 3`
 
-# Go settings
-BIN_DIR := $(GOPATH)/bin
-GOMETALINTER := $(BIN_DIR)/gometalinter
-PATH_BUILD=test-pkgs
-
 # Check for required command tools to build or stop immediately
 EXECUTABLES = git go find pwd
 K := $(foreach exec,$(EXECUTABLES),\
@@ -25,19 +20,25 @@ K := $(foreach exec,$(EXECUTABLES),\
 
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-
+# Settings
+BIN_DIR := $(GOPATH)/bin
+GOMETALINTER := $(BIN_DIR)/gometalinter
+TEST_BUILDS=test-pkgs
+PROD_BUILDS=dist
+OS=$(shell uname -s)
 BINARY=ktl
 VERSION := $(shell cat VERSION)
 GIT_COMMIT := $(shell git rev-parse HEAD)
-BUILD:= $(shell date -u +%FT%T)
+BUILD_DATE:= $(shell date -u +%FT%T)
 PLATFORMS=darwin linux windows
 ARCHITECTURES=amd64
 VERSION_PACKAGE = github.com/svx/ktl/pkg/version
+LD_FLAGS += -s -w
 
 # Setup linker flags option for build that interoperate with variable names in src code
 #LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.GitCommit=$(GIT_COMMIT)"
-LDFLAGS += -X main.Version=${VERSION}
-LDFLAGS += -X main.GitCommit=${GIT_COMMIT}
+#LDFLAGS += -X main.Version=${VERSION}
+#LDFLAGS += -X main.GitCommit=${GIT_COMMIT}
 
 # Add the following 'help' target to your Makefile
 # And add help text after each target name starting with '\#\#'
@@ -46,30 +47,48 @@ help: ## This help message
 	@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s :)"
 
 .PHONY: default
-default: build ## Builds default binary
+default: test-build ## Build default test binary
 
-all: clean build_all install
+.PHONY: setup
+setup:
+ifeq ($(OS), Darwin)
+	brew install dep
+else
+	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+endif
+	dep ensure -vendor-only
 
 .PHONY: build
-build: ## Build test binary
+build: ## Build binary
+	@echo ""
+	@echo "$(YELLOW)==> Creating binaries for $(VERSION)$(RESET)"
+	@if [ -d $(PROD_BUILDS) ]; then rm -rf $(PROD_BUILDS); fi;
+	@go fmt
+	@gox -ldflags "$(LD_FLAGS) -X main.Version=${VERSION} \
+	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE)" \
+	 -osarch="linux/amd64 darwin/amd64" -output "$(PROD_BUILDS)/{{.Dir}}_{{.OS}}_{{.Arch}}"
+	@echo ""
+	@echo "$(YELLOW)==> Done ! Binaries for $(VERSION) are created in $(PROD_BUILDS) $(RESET)"
+
+.PHONY: test-build
+test-build: ## Creating test builds (binaries) for local testing
 	@echo ""
 	@echo "$(YELLOW)==> Creating test binaries for $(VERSION)$(RESET)"
-	#go build ${LDFLAGS} -X github.com/svx/ktl/cmd/version -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
-	#go build -ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
-	go build -ldflags "-X main.Version=${VERSION} -X github.com/svx/ktl/cmd.BuildTime=$(BUILD)" -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
-	#go build -ldflags '$(LDFLAGS)' -o $(PATH_BUILD)/$(BINARY)_$(VERSION)
+	@if [ -d $(TEST_BUILDS) ]; then rm -rf $(TEST_BUILDS); fi;
+	@go fmt
+	@gox -ldflags "$(LD_FLAGS) -X main.Version=${VERSION} \
+	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE)" \
+	 -osarch="linux/amd64 darwin/amd64" -output "$(TEST_BUILDS)/{{.Dir}}_{{.OS}}_{{.Arch}}"
+	@echo ""
+	@echo "$(YELLOW)==> Done ! Test binaries for $(VERSION) are created in $(TEST_BUILDS) $(RESET)"
 
+.PHONY: install
+install: ## Install test binary locally
+	@echo ""
+	@echo "$(YELLOW)==> Installing test binary for $(VERSION)$(RESET)"
+	go install -ldflags "$(LD_FLAGS) -X main.Version=${VERSION} \
+	 -X github.com/svx/ktl/cmd.BuildTime=$(BUILD_DATE)"
 
-
-build_gox:
-	gox -ldflags  "-X main.Version=${VERSION} -X github.com/svx/ktl/cmd.BuildTime=$(BUILD)" -osarch="linux/amd64"
-
-install:
-	go install ${LDFLAGS}
-
-# Remove only what we've created
-clean:
-	find ${ROOT_DIR} -name '${BINARY}[-?][a-zA-Z0-9]*[-?][a-zA-Z0-9]*' -delete
 
 $(GOMETALINTER):
 	go get -u github.com/alecthomas/gometalinter
