@@ -9,31 +9,31 @@ About
 
 A wrapper around `kubectl`.
 
-I am lazy, I do not want to type `kubectl get pods --all-namespaces`.
+I am lazy, I do not want to type ``kubectl get pods --all-namespaces``.
 
-`ktl` (Kube Control) is a tiny wrapper written in Go which calls `kubectl` in the background.
+``ktl`` (Kube Control) is a tiny wrapper written in Go which calls ``kubectl`` in the background.
 
-For example `ktl pods` is calling `kubectl get pods --all-namespaces`.
+For example `ktl pods` is calling ``kubectl get pods --all-namespaces``.
 
 Why Go and not *just* some *bash aliases* ?
 
-Because I want to learn Go and I switch all the time between mutiple Operating Systems.
+Because I want to learn Go and I switch all the time between multiple Operating Systems.
 
 Dependencies
 ============
 
-- `kubectl`
+- ``kubectl``
 
 Install
 =======
 
-Install it via `curl`:
+Install it via ``curl``:
 
 ::
 
     curl https://raw.githubusercontent.com/svx/ktl/master/install.sh | sh
 
-Install via `go get`:
+Install via ``go get``:
 
 ::
 
