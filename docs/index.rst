@@ -13,7 +13,7 @@ Kube Control
 About
 =====
 
-A wrapper around `kubectl`.
+A wrapper around ``kubectl``.
 
 I am lazy, I do not want to type ``kubectl get pods --all-namespaces``.
 
