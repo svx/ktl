@@ -22,7 +22,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-
+DEP_RELEASE_TAG="0.0.1"
 RELEASES_URL="https://github.com/svx/ktl/releases"
 INSTALL_DIRECTORY="/usr/local/bin"
 
